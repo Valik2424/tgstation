@@ -54,7 +54,13 @@
 /*
  * ID CARDS
  */
+/obj/item/card/data/full_color
+	desc = "Пластиковая магнитная карта для простого и быстрого хранения и передачи данных. Эта полностью цветная."
+	icon_state = "data_2"
 
+/obj/item/card/data/disk
+	desc = "Пластиковая магнитная карта для простого и быстрого хранения и передачи данных. Эта необъяснимо похожа на дискету."
+	icon_state = "data_3"
 /// "Retro" ID card that renders itself as the icon state with no overlays.
 /obj/item/card/id
 	name = "идентификационная карта"

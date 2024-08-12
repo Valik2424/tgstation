@@ -1632,3 +1632,5 @@
 	set name = "Посмотреть навыки"
 
 	mind?.print_levels(src)
+/mob/proc/canUseTopic(atom/movable/M, be_close=FALSE, no_dexterity=FALSE, no_tk=FALSE, need_hands = FALSE, floor_okay=FALSE)
+	return
