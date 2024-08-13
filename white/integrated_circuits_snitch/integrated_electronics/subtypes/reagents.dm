@@ -313,20 +313,24 @@
 			set_pin_data(IC_OUTPUT, 2, WEAKREF(src))
 			push_data()
 
-/obj/item/integrated_circuit_old/reagent/storage/grinder/proc/grind()
-	if(reagents.total_volume >= reagents.maximum_volume)
-		activate_pin(3)
-		return FALSE
-	var/obj/item/I = get_pin_data_as_type(IC_INPUT, 1, /obj/item)
-	if(istype(I)&&(I.grind_results)&&check_target(I)&&(I.on_grind(src) != -1))
-		reagents.add_reagent_list(I.grind_results)
-		if(I.reagents)
-			I.reagents.trans_to(src, I.reagents.total_volume)
-		qdel(I)
-		activate_pin(2)
-		return TRUE
-	activate_pin(3)
-	return FALSE
+/obj/item/integrated_circuit_old/reagent/storage/grinder/do_work(ord, mob/user) // Додано аргумент user
+	switch(ord)
+		if(1)
+			var/obj/item/I = get_pin_data_as_type(IC_INPUT, 1, /obj/item)
+			if(reagents.total_volume >= reagents.maximum_volume)
+				activate_pin(3)
+				return FALSE
+			if(istype(I)&&(I.grind_results)&&check_target(I)&&(I.on_grind(src) != -1) && I.grind(reagents, user))  // Виклик I.grind() з user
+				if(I.reagents) //якщо в предметі були свої реагенти, переливаємо їх в наш контейнер
+					I.reagents.trans_to(src, I.reagents.total_volume)
+				qdel(I)
+				activate_pin(2)
+				return TRUE
+			activate_pin(3)
+			return FALSE
+		if(4)
+			set_pin_data(IC_OUTPUT, 2, WEAKREF(src))
+			push_data()
 
 /obj/item/integrated_circuit_old/reagent/storage/juicer
 	name = "reagent juicer"
@@ -351,29 +355,22 @@
 	complexity = 16
 	spawn_flags = IC_SPAWN_RESEARCH
 
-/obj/item/integrated_circuit_old/reagent/storage/juicer/do_work(ord)
+/obj/item/integrated_circuit_old/reagent/storage/juicer/do_work(ord, mob/user)
 	switch(ord)
-		if(1)
-			juice()
+		if(1)  //  Виправлення
+			if(reagents.total_volume >= reagents.maximum_volume)
+				activate_pin(3)
+				return FALSE
+			var/obj/item/I = get_pin_data_as_type(IC_INPUT, 1, /obj/item)
+			if(istype(I) && check_target(I) && (I.on_juice() != -1) && I.juice(reagents, user))
+				qdel(I)
+				activate_pin(2)
+				return TRUE
+			activate_pin(3)
+			return FALSE
 		if(4)
 			set_pin_data(IC_OUTPUT, 2, WEAKREF(src))
 			push_data()
-
-/obj/item/integrated_circuit_old/reagent/storage/juicer/proc/juice()
-	if(reagents.total_volume >= reagents.maximum_volume)
-		activate_pin(3)
-		return FALSE
-	var/obj/item/I = get_pin_data_as_type(IC_INPUT, 1, /obj/item)
-	if(istype(I) && check_target(I) && (I.on_juice() != -1) && I.juice(reagents)) // Виправлення: виклик I.juice()
-		var/juice_typepath = I.juice_typepath // Виправлення: отримання типу соку
-		if (juice_typepath)
-			var/datum/reagent/juice_reagent = new juice_typepath // Виправлення: створення реагенту
-			reagents.add_reagent(juice_reagent, 1) // Виправлення: додавання реагенту
-		qdel(I)
-		activate_pin(2)
-		return TRUE
-	activate_pin(3)
-	return FALSE
 
 
 
@@ -553,17 +550,16 @@
 /obj/item/integrated_circuit_old/reagent/smoke/do_work(ord)
 	switch(ord)
 		if(1)
-			if(!reagents || (reagents.total_volume < IC_SMOKE_REAGENTS_MINIMUM_UNITS))
+			if (!reagents || (reagents.total_volume < IC_SMOKE_REAGENTS_MINIMUM_UNITS)) // Об'єднано  перевірки
 				return
 			var/location = get_turf(src)
-			var/datum/effect_system/fluid_spread/smoke/chem/smoke_machine/S = new /datum/effect_system/fluid_spread/smoke/chem/smoke_machine // Виправлення 1 & 2: вказано коректний тип
+			var/datum/effect_system/fluid_spread/smoke/chem/smoke_machine/S = new /datum/effect_system/fluid_spread/smoke/chem/smoke_machine
 			S.attach(location)
 			playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
-			if(S)
-				S.set_up(reagents, smoke_radius, location, notified)
-				if(!notified)
-					notified = TRUE
-				S.start()
+			S.set_up(reagents, smoke_radius, location, notified)
+			if (!notified)
+				notified = TRUE
+			S.start()
 			reagents.clear_reagents()
 			activate_pin(2)
 		if(3)

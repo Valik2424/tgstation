@@ -6,7 +6,7 @@
 	materials = list(/datum/material/glass = 5000, /datum/material/iron = 10000)
 	build_path = /obj/item/integrated_circuit_printer
 	category = list("Электроника")
-	departmental_flags = DEPARTMENTAL_FLAG_SCIENCE
+	departmental_flags = DEPARTMENT_SCIENCE //unknown variable: DEPARTMENTAL_FLAG_SCIENCE
 
 /datum/design/IC_printer_upgrade_advanced
 	name = "Integrated circuit printer upgrade: Advanced Designs"
@@ -16,7 +16,7 @@
 	materials = list(/datum/material/glass = 10000, /datum/material/iron = 10000)
 	build_path = /obj/item/disk/integrated_circuit_old/upgrade/advanced
 	category = list("Электроника")
-	departmental_flags = DEPARTMENTAL_FLAG_SCIENCE
+	departmental_flags = DEPARTMENT_SCIENCE //unknown variable: DEPARTMENTAL_FLAG_SCIENCE
 
 /datum/design/IC_printer_upgrade_clone
 	name = "Integrated circuit printer upgrade: Instant Cloning"
@@ -26,4 +26,4 @@
 	materials = list(/datum/material/glass = 10000, /datum/material/iron = 10000)
 	build_path = /obj/item/disk/integrated_circuit_old/upgrade/clone
 	category = list("Электроника")
-	departmental_flags = DEPARTMENTAL_FLAG_SCIENCE
+	departmental_flags = DEPARTMENT_SCIENCE //unknown variable: DEPARTMENTAL_FLAG_SCIENCE

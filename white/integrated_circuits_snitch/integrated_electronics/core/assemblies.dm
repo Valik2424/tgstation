@@ -36,12 +36,14 @@
 	var/sealed = FALSE
 	var/datum/weakref/idlock = null
 
-	hud_possible = list(DIAG_STAT_HUD, DIAG_BATT_HUD, DIAG_TRACK_HUD) //diagnostic hud overlays
+	hud_possible = list(DIAG_STAT_HUD, DIAG_BATT_HUD, DIAG_TRACK_HUD) //diagnostic hud overlays //unknown variable: DIAG_CIRCUIT_HUD
 	max_integrity = 50
 	pass_flags = 0
-	armor_type = /datum/armor/assembly_armor
+	armor_type = /datum/armor/electronic_assembly_armor
+	anchored = FALSE
 	var/can_anchor = TRUE
 	var/detail_color = COLOR_ASSEMBLY_BLACK
+
 /datum/armor/electronic_assembly_armor
 	melee = 50
 	bullet = 70

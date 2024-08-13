@@ -1,4 +1,3 @@
-/*
 #define MAX_CIRCUIT_CLONE_TIME 3 MINUTES //circuit slow-clones can only take up this amount of time to complete
 
 /obj/item/integrated_circuit_printer
@@ -16,7 +15,6 @@
 	var/recycling = FALSE		// If an assembly is being emptied into this printer
 	var/list/program			// Currently loaded save, in form of list
 	var/datum/weakref/idlock = null
-
 /obj/item/integrated_circuit_printer/proc/check_interactivity(mob/user)
 	return user.canUseTopic(src, BE_CLOSE)
 
@@ -143,7 +141,7 @@
 	if(debug)
 		HTML += "<center><h3>DEBUG PRINTER -- Infinite materials. Cloning available.</h3></center>"
 	else
-		HTML += "Metal: [materials.total_amount()]/[materials.max_amount].<br><br>"
+		HTML += "Metal: [materials.total_amount()]/[materials.max_amount].<br><br>"  // Виправлення: materials.total_amount()
 
 	HTML += "Identity-lock: "
 	if(idlock)
@@ -152,7 +150,7 @@
 	else
 		HTML += "None | Reset<br>"
 
-	if(CONFIG_GET(flag/allow_ic_printing) || debug)  // Виправлення 2: Використання коректного шляху до налаштування
+	if(can_clone || debug)  //  Виправлення:  використання  can_clone
 		HTML += "Assembly cloning: [can_clone ? (fast_clone ? "Instant" : "Available") : "Unavailable"].<br>"
 
 	HTML += "Circuits available: [upgraded || debug ? "Advanced":"Regular"]."
@@ -160,7 +158,7 @@
 		HTML += "<br>Crossed out circuits mean that the printer is not sufficiently upgraded to create that circuit."
 
 	HTML += "<hr>"
-	if((can_clone && CONFIG_GET(flag/allow_ic_printing)) || debug)  // Виправлення 2: Використання коректного шляху до налаштування
+	if((can_clone && can_clone) || debug)  //  Виправлення:  використання  can_clone
 		HTML += "Here you can load script for your assembly.<br>"
 		if(!cloning)
 			HTML += " <A href='?src=[REF(src)];print=load'>Load Program</a> "
@@ -242,7 +240,7 @@
 			E.opened = TRUE
 			E.update_icon()
 			//reupdate diagnostic hud because it was put_in_hands() and not pickup()'ed
-			E.diag_hud_set_circuithealth()
+			//E.diag_hud_set_circuithealth()
 			E.diag_hud_set_circuitcell()
 			E.diag_hud_set_circuitstat()
 			E.diag_hud_set_circuittracking()
@@ -252,8 +250,8 @@
 		playsound(src, 'sound/items/jaws_pry.ogg', 50, TRUE)
 
 	if(href_list["print"])
-		if(!CONFIG_GET(flag/ic_printing) && !debug)
-			to_chat(usr, span_warning("CentCom has disabled printing of custom circuitry due to recent allegations of copyright infringement."))
+		if(!can_clone)  //  Використання  can_clone
+			to_chat(usr, span_warning("This printer does not have the cloning upgrade."))
 			return
 		if(!can_clone) // Copying and printing ICs is cloning
 			to_chat(usr, span_warning("This printer does not have the cloning upgrade."))
@@ -353,4 +351,3 @@
 /obj/item/integrated_circuit_printer/MouseDrop(atom/over, src_location, over_location, src_control, over_control, params)
 	if(over == usr)
 		interact(usr)
-*/

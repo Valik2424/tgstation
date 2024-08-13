@@ -5962,6 +5962,7 @@
 #include "white\integrated_circuits_snitch\integrated_electronics\subtypes\text.dm"
 #include "white\integrated_circuits_snitch\integrated_electronics\subtypes\time.dm"
 #include "white\integrated_circuits_snitch\integrated_electronics\subtypes\trig.dm"
+#include "white\integrated_circuits_snitch\electronics_designs.dm"
 #include "white\master\code\antimatter.dm"
 #include "white\master\code\cryopods.dm"
 #include "white\master\code\durka.dm"
