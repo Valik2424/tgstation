@@ -79,7 +79,7 @@
 /obj/item/electronic_assembly/proc/check_interactivity(mob/user)
 	if(!istype(user, /mob))
 		return
-	return user.canUseTopic(src, BE_CLOSE) //undefined proc: "canUseTopic" on /mob
+	return user.canUseTopic(src, BE_CLOSE)
 
 /obj/item/electronic_assembly/Bump(atom/AM)
 	collw = AM

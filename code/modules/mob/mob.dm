@@ -1633,4 +1633,19 @@
 
 	mind?.print_levels(src)
 /mob/proc/canUseTopic(atom/movable/M, be_close=FALSE, no_dexterity=FALSE, no_tk=FALSE, need_hands = FALSE, floor_okay=FALSE)
-	return
+	if(stat == DEAD)
+		return FALSE //  Мертві  не  можуть  взаємодіяти
+
+	if(incapacitated())
+		return FALSE //  Непритомні  моби  не  можуть  взаємодіяти
+
+	if(be_close && !Adjacent(M))
+		return FALSE //  Моб  повинен  бути  поруч  з  об'єктом
+
+	if(need_hands && HAS_TRAIT(src, TRAIT_HANDS_BLOCKED))
+		return FALSE //  Моб  не  має  вільних  рук
+
+	//  Додаткові  перевірки  можна  додати  тут,  залежно  від  потреб  гри
+	//  Наприклад,  перевірка  на  наявність  певного  предмета  або  стану
+
+	return TRUE //  Якщо  всі  перевірки  пройдені,  взаємодія  дозволена

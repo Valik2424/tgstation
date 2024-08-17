@@ -129,17 +129,24 @@ a creative player the means to solve many problems.  Circuits are held inside an
 
 /obj/item/integrated_circuit_old/ui_interact(mob/user)
 	. = ..()
+
+	world.log << "Початок ui_interact() для [src] ([type])" // Додано логування
+
 	if(!check_interactivity(user))
+		world.log << "check_interactivity() повернув FALSE для [user]" //  Логування  результату  check_interactivity()
 		return
 
 	if(assembly)
+		world.log << "Схема знаходиться в збірці [assembly]" //  Логування  інформації  про  збірку
 		assembly.ui_interact(user, src)
 		return
+
+	world.log << "Створення інтерфейсу для схеми" //  Логування  створення  інтерфейсу
 
 	var/table_edge_width = "30%"
 	var/table_middle_width = "40%"
 
-	var/datum/browser/popup = new(user, "scannernew", name, 800, 630) // Set up the popup browser window
+	var/datum/browser/popup = new(user, "scannernew", name, 800, 630)
 	popup.add_stylesheet("scannernew", 'html/browser/assembly_ui.css')
 
 	var/HTML = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><title>[src.displayed_name]</title></head><body> \
@@ -237,12 +244,14 @@ a creative player the means to solve many problems.  Circuits are held inside an
 	if(power_draw_idle)
 		HTML += "<br>Power Draw: [power_draw_idle] W (Idle)"
 	if(power_draw_per_use)
-		HTML += "<br>Power Draw: [power_draw_per_use] W (Active)" // Borgcode says that powercells' checked_use() takes joules as input.
+		HTML += "<br>Power Draw: [power_draw_per_use] W (Active)"
 
 	HTML += "<br>[extended_desc]</body></html>"
 
 	popup.set_content(HTML)
 	popup.open()
+
+	world.log << "Інтерфейс створено та  відкрито" //  Логування  успішного  відкриття  інтерфейсу
 
 /obj/item/integrated_circuit_old/Topic(href, href_list)
 	if(!check_interactivity(usr))
